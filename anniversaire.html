@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f6d8e1">
+    <title>Une surprise pour toi ❤️</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --rose: #d95b83;
+    --rose-dark: #633845;
+    --rose-light: #fff0f4;
+    --cream: #fffaf9;
+    --text: #4d303a;
+    --muted: #8c6873;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,.9), transparent 25%),
+        radial-gradient(circle at 90% 90%, rgba(235,145,171,.22), transparent 30%),
+        linear-gradient(135deg, #fff5f1, #f9e2e9);
+    overflow-x: hidden;
+}
+
+button {
+    font: inherit;
+}
+
+.site {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.screen {
+    min-height: 100vh;
+    padding: 28px 16px;
+    display: none;
+    place-items: center;
+}
+
+.screen.active {
+    display: grid;
+    animation: screenIn .7s ease both;
+}
+
+.card {
+    width: min(760px, 100%);
+    background: rgba(255, 251, 250, .92);
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 30px;
+    padding: clamp(28px, 6vw, 58px);
+    text-align: center;
+    box-shadow: 0 25px 80px rgba(103, 48, 67, .14);
+    backdrop-filter: blur(12px);
+}
+
+.welcome-card {
+    max-width: 650px;
+}
+
+.eyebrow {
+    color: var(--rose);
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+}
+
+h1, h2 {
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+h1 {
+    font-size: clamp(42px, 8vw, 72px);
+    color: var(--rose-dark);
+}
+
+h2 {
+    font-size: clamp(35px, 7vw, 58px);
+    color: var(--rose-dark);
+    margin-bottom: 14px;
+}
+
+.intro,
+.birthday-text,
+.countdown-intro {
+    max-width: 570px;
+    margin: 22px auto 30px;
+    line-height: 1.8;
+    color: var(--muted);
+    font-size: 16px;
+}
+
+.sparkle {
+    color: var(--rose);
+    font-size: 28px;
+    margin-bottom: 10px;
+    animation: pulse 1.8s infinite;
+}
+
+.primary,
+.secondary {
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 25px;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+.primary {
+    color: white;
+    background: var(--rose);
+    box-shadow: 0 10px 25px rgba(217,91,131,.28);
+}
+
+.primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(217,91,131,.35);
+}
+
+.secondary {
+    color: var(--rose-dark);
+    background: #f8e5eb;
+}
+
+.name {
+    color: var(--rose);
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.cake {
+    font-size: 90px;
+    margin: 10px 0 20px;
+    animation: heartbeat 1.8s infinite;
+}
+
+.next-btn {
+    margin-top: 15px;
+}
+
+/* Calendrier */
+.calendar {
+    max-width: 520px;
+    margin: 25px auto;
+    padding: 20px;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 12px 35px rgba(95,44,60,.08);
+}
+
+.calendar-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-head div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.calendar-head strong {
+    font-size: 23px;
+    color: var(--rose-dark);
+}
+
+.calendar-head span {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.calendar-arrow {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--rose-light);
+    color: var(--rose);
+    cursor: pointer;
+    font-size: 25px;
+}
+
+.weekdays,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.weekdays span {
+    color: var(--muted);
+    font-size: 12px;
+    padding: 7px 0;
+}
+
+.days button,
+.days span {
+    min-height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+}
+
+.days .empty {
+    min-height: 42px;
+}
+
+.days .birthday-day {
+    background: var(--rose);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 7px 18px rgba(217,91,131,.35);
+    animation: birthdayPulse 1.8s infinite;
+}
+
+.date-message {
+    margin: 20px auto 5px;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--rose-light);
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.date-message strong {
+    color: var(--rose-dark);
+}
+
+.date-heart {
+    color: var(--rose);
+    font-size: 28px;
+}
+
+/* Lettre */
+.letter {
+    max-width: 600px;
+    margin: 25px auto;
+    padding: 28px;
+    text-align: left;
+    line-height: 1.85;
+    background:
+        linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.92)),
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 31px,
+            rgba(217,91,131,.08) 32px
+        );
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 1px rgba(217,91,131,.08);
+}
+
+.letter p {
+    margin-bottom: 15px;
+}
+
+.signature {
+    color: var(--rose);
+    text-align: right;
+    font-style: italic;
+}
+
+/* Compteur */
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 620px;
+    margin: 30px auto;
+}
+
+.countdown div {
+    padding: 18px 8px;
+    border-radius: 18px;
+    background: var(--rose-light);
+}
+
+.countdown strong {
+    display: block;
+    font-size: clamp(25px, 6vw, 42px);
+    color: var(--rose-dark);
+}
+
+.countdown span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.final-heart {
+    color: var(--rose);
+    font-size: 68px;
+    animation: heartbeat 1.3s infinite;
+}
+
+.final-quote {
+    max-width: 500px;
+    margin: 12px auto 25px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.7;
+}
+
+/* Cœurs flottants */
+.floating-hearts span {
+    position: fixed;
+    z-index: 0;
+    color: rgba(217,91,131,.2);
+    font-size: 25px;
+    animation: float 7s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.floating-hearts span:nth-child(1) { left: 8%; top: 15%; }
+.floating-hearts span:nth-child(2) { left: 22%; top: 78%; animation-delay: 1s; }
+.floating-hearts span:nth-child(3) { left: 78%; top: 12%; animation-delay: 2s; }
+.floating-hearts span:nth-child(4) { left: 90%; top: 65%; animation-delay: 3s; }
+.floating-hearts span:nth-child(5) { left: 52%; top: 7%; animation-delay: 4s; }
+.floating-hearts span:nth-child(6) { left: 4%; top: 55%; animation-delay: 5s; }
+.floating-hearts span:nth-child(7) { left: 67%; top: 85%; animation-delay: 1.5s; }
+.floating-hearts span:nth-child(8) { left: 35%; top: 25%; animation-delay: 3.5s; }
+
+@keyframes screenIn {
+    from { opacity: 0; transform: translateY(18px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0); opacity: .25; }
+    50% { transform: translateY(-25px) rotate(10deg); opacity: .7; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.12); }
+    45% { transform: scale(1); }
+    65% { transform: scale(1.1); }
+}
+
+@keyframes birthdayPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@media (max-width: 650px) {
+
+    .countdown {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .letter {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .card {
+        border-radius: 22px;
+        padding: 26px 17px;
+    }
+
+    .calendar {
+        padding: 12px;
+    }
+
+    .days button,
+    .days span,
+    .days .empty {
+        min-height: 36px;
+    }
+}
+
+</style>
+</head>
+<body>
+    <div class="floating-hearts" aria-hidden="true">
+        <span>♡</span><span>♥</span><span>♡</span><span>♥</span>
+        <span>♡</span><span>♥</span><span>♡</span><span>♥</span>
+    </div>
+
+    <main class="site">
+        <!-- Écran d'accueil -->
+        <section class="screen active" id="welcome">
+            <div class="card welcome-card">
+                <div class="sparkle">✦</div>
+                <p class="eyebrow">une petite surprise pour toi</p>
+                <h1>J'ai préparé<br>quelque chose pour toi ❤️</h1>
+                <p class="intro">
+                    Pour une personne dont la naissance a rendu le monde
+                    un peu plus beau.
+                </p>
+                <button class="primary" id="openBtn">Ouvrir ma surprise ✨</button>
+            </div>
+        </section>
+
+        <!-- Anniversaire -->
+        <section class="screen" id="birthday">
+            <div class="card birthday-card">
+                <p class="eyebrow">une journée très spéciale</p>
+                <h2>Joyeux anniversaire ❤️</h2>
+                <p class="name">À toi, une personne spéciale</p>
+
+                <div class="cake" aria-hidden="true">🎂</div>
+
+                <p class="birthday-text">
+                    Aujourd'hui, je célèbre bien plus qu'une date.
+                    Je célèbre le jour où une personne merveilleuse est venue au monde.
+                </p>
+
+                <button class="primary next-btn" data-next="calendar">
+                    Découvrir la suite 💌
+                </button>
+            </div>
+        </section>
+
+        <!-- Calendrier -->
+        <section class="screen" id="calendar">
+            <div class="card">
+                <p class="eyebrow">le jour où tout a commencé</p>
+                <h2 id="birthDateTitle">12 mars 2000</h2>
+
+                <div class="calendar">
+                    <div class="calendar-head">
+                        <button class="calendar-arrow" id="prevMonth" aria-label="Mois précédent">‹</button>
+                        <div>
+                            <strong id="calendarMonth">Octobre</strong>
+                            <span id="calendarYear">2000</span>
+                        </div>
+                        <button class="calendar-arrow" id="nextMonth" aria-label="Mois suivant">›</button>
+                    </div>
+
+                    <div class="weekdays">
+                        <span>L</span><span>M</span><span>M</span>
+                        <span>J</span><span>V</span><span>S</span><span>D</span>
+                    </div>
+
+                    <div class="days" id="calendarDays"></div>
+                </div>
+
+                <div class="date-message">
+                    <span class="date-heart">♥</span>
+                    <p><strong id="birthDateText">12 mars 2000</strong></p>
+                    <p>Le jour où une belle histoire a commencé. ✨</p>
+                </div>
+
+                <button class="primary next-btn" data-next="letter">
+                    Lire mon message 💌
+                </button>
+            </div>
+        </section>
+
+        <!-- Lettre -->
+        <section class="screen" id="letter">
+            <div class="card letter-card">
+                <p class="eyebrow">quelques mots pour toi</p>
+                <h2>Une lettre rien que pour toi</h2>
+
+                <div class="letter">
+                    <p>Ma chère,</p>
+
+                    <p>
+                        En ce jour particulier, je voulais simplement te rappeler
+                        à quel point tu es précieuse. Il existe des personnes que
+                        l'on rencontre et que l'on oublie, et puis il y a celles
+                        qui laissent une petite lumière dans notre cœur.
+                    </p>
+
+                    <p>
+                        Tu fais partie de ces personnes. Ton sourire, ta présence,
+                        ta façon d'être... tout cela mérite d'être célébré.
+                    </p>
+
+                    <p>
+                        Je te souhaite une vie remplie de bonheur, de réussite,
+                        de paix et de belles surprises. Que chaque nouvelle année
+                        t'apporte davantage de raisons de sourire.
+                    </p>
+
+                    <p>
+                        Et surtout, n'oublie jamais une chose :
+                        <strong>tu es unique. ❤️</strong>
+                    </p>
+
+                    <p class="signature">Avec beaucoup d'affection ♡</p>
+                </div>
+
+                <button class="primary next-btn" data-next="countdown">
+                    Une dernière surprise ⏳
+                </button>
+            </div>
+        </section>
+
+        <!-- Compteur -->
+        <section class="screen" id="countdown">
+            <div class="card countdown-card">
+                <p class="eyebrow">rendez-vous le</p>
+                <h2 id="nextBirthdayTitle">Bientôt 🎂</h2>
+
+                <p class="countdown-intro">
+                    Ton prochain anniversaire approche...
+                </p>
+
+                <div class="countdown" id="countdownTimer">
+                    <div><strong id="days">0</strong><span>jours</span></div>
+                    <div><strong id="hours">0</strong><span>heures</span></div>
+                    <div><strong id="minutes">0</strong><span>minutes</span></div>
+                    <div><strong id="seconds">0</strong><span>secondes</span></div>
+                </div>
+
+                <div class="final-heart">♥</div>
+
+                <p class="final-quote">
+                    « Certaines personnes rendent la vie plus belle
+                    simplement en étant là. »
+                </p>
+
+                <button class="secondary" id="restartBtn">
+                    Revoir la surprise ↺
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+const screens = document.querySelectorAll(".screen");
+
+function showScreen(id) {
+    screens.forEach(screen => screen.classList.remove("active"));
+    const target = document.getElementById(id);
+    if (target) {
+        target.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+// Navigation
+document.getElementById("openBtn").addEventListener("click", () => {
+    showScreen("birthday");
+});
+
+document.querySelectorAll(".next-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        showScreen(button.dataset.next);
+    });
+});
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+    showScreen("welcome");
+});
+
+/* ==========================
+   CALENDRIER DE LA DATE DE NAISSANCE
+========================== */
+const monthNames = [
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+];
+
+const calendarDays = document.getElementById("calendarDays");
+const calendarMonth = document.getElementById("calendarMonth");
+const calendarYear = document.getElementById("calendarYear");
+
+// Date d'exemple : modifie-la pour la tienne (attention : janvier = 0, décembre = 11)
+const BIRTH = { day: 12, month: 2, year: 2000 };
+
+let displayedMonth = BIRTH.month;
+let displayedYear = BIRTH.year;
+
+const birthLabel = `${BIRTH.day} ${monthNames[BIRTH.month].toLowerCase()} ${BIRTH.year}`;
+document.getElementById("birthDateTitle").textContent = birthLabel;
+document.getElementById("birthDateText").textContent = birthLabel;
+
+function renderCalendar() {
+    calendarDays.innerHTML = "";
+
+    calendarMonth.textContent = monthNames[displayedMonth];
+    calendarYear.textContent = displayedYear;
+
+    const firstDay = new Date(displayedYear, displayedMonth, 1).getDay();
+    // JavaScript: dimanche=0. On veut lundi=0.
+    const mondayIndex = (firstDay + 6) % 7;
+
+    const daysInMonth = new Date(
+        displayedYear,
+        displayedMonth + 1,
+        0
+    ).getDate();
+
+    for (let i = 0; i < mondayIndex; i++) {
+        const empty = document.createElement("span");
+        empty.className = "empty";
+        calendarDays.appendChild(empty);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement("span");
+        cell.textContent = day;
+
+        if (
+            displayedYear === BIRTH.year &&
+            displayedMonth === BIRTH.month &&
+            day === BIRTH.day
+        ) {
+            cell.classList.add("birthday-day");
+            cell.title = "Jour de naissance ❤️";
+        }
+
+        calendarDays.appendChild(cell);
+    }
+}
+
+document.getElementById("prevMonth").addEventListener("click", () => {
+    displayedMonth--;
+    if (displayedMonth < 0) {
+        displayedMonth = 11;
+        displayedYear--;
+    }
+    renderCalendar();
+});
+
+document.getElementById("nextMonth").addEventListener("click", () => {
+    displayedMonth++;
+    if (displayedMonth > 11) {
+        displayedMonth = 0;
+        displayedYear++;
+    }
+    renderCalendar();
+});
+
+renderCalendar();
+
+/* ==========================
+   COMPTE À REBOURS
+========================== */
+// Prochain anniversaire : calculé à partir de la date de naissance
+function nextBirthday() {
+    const now = new Date();
+    let target = new Date(now.getFullYear(), BIRTH.month, BIRTH.day);
+    if (target <= now) {
+        target = new Date(now.getFullYear() + 1, BIRTH.month, BIRTH.day);
+    }
+    return target;
+}
+
+const birthdayTarget = nextBirthday();
+document.getElementById("nextBirthdayTitle").textContent =
+    `${birthdayTarget.getDate()} ${monthNames[birthdayTarget.getMonth()].toLowerCase()} ${birthdayTarget.getFullYear()} 🎂`;
+
+function updateCountdown() {
+    const now = new Date();
+    const difference = birthdayTarget - now;
+
+    if (difference <= 0) {
+        document.getElementById("days").textContent = "🎂";
+        document.getElementById("hours").textContent = "🎉";
+        document.getElementById("minutes").textContent = "❤️";
+        document.getElementById("seconds").textContent = "🥳";
+        return;
+    }
+
+    const seconds = Math.floor(difference / 1000);
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    document.getElementById("days").textContent = days;
+    document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+    document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+    document.getElementById("seconds").textContent = String(secs).padStart(2, "0");
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculatrice</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-display: #0d0d14;
+  --color-cyan: #00e5ff;
+  --color-orange: #ff6b35;
+  --color-green: #39ff14;
+  --color-purple: #9d4edd;
+  --color-btn: #1a1a2e;
+  --color-btn-hover: #252540;
+  --text-primary: #e8e8f0;
+  --text-dim: #6060a0;
+}
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+  background-color: var(--bg-dark);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  font-family:'Exo 2',sans-serif;
+}
+.calculator {
+  width:340px;
+  background:var(--bg-card);
+  border-radius:20px;
+  padding:24px;
+}
+.display {
+  background:var(--bg-display);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:20px;
+  text-align:right;
+}
+.display-expression {
+  font-size:12px;
+  color:var(--text-dim);
+}
+.display-value {
+  font-size:40px;
+  color:var(--color-cyan);
+}
+.buttons-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.btn {
+  height:56px;
+  border:none;
+  border-radius:10px;
+  background:var(--color-btn);
+  color:var(--text-primary);
+  cursor:pointer;
+}
+.btn-operator {color:var(--color-orange);}
+.btn-equals {color:var(--color-cyan);}
+</style>
+</head>
+
+<body>
+<div class="calculator">
+  <div class="display">
+    <div id="expression" class="display-expression"></div>
+    <div id="result" class="display-value">0</div>
+  </div>
+
+  <div class="buttons-grid">
+    <button class="btn" onclick="ajouterChiffre('7')">7</button>
+    <button class="btn" onclick="ajouterChiffre('8')">8</button>
+    <button class="btn" onclick="ajouterChiffre('9')">9</button>
+    <button class="btn btn-operator" onclick="choisirOperation('÷')">÷</button>
+
+    <button class="btn" onclick="ajouterChiffre('4')">4</button>
+    <button class="btn" onclick="ajouterChiffre('5')">5</button>
+    <button class="btn" onclick="ajouterChiffre('6')">6</button>
+    <button class="btn btn-operator" onclick="choisirOperation('×')">×</button>
+
+    <button class="btn" onclick="ajouterChiffre('1')">1</button>
+    <button class="btn" onclick="ajouterChiffre('2')">2</button>
+    <button class="btn" onclick="ajouterChiffre('3')">3</button>
+    <button class="btn btn-operator" onclick="choisirOperation('−')">−</button>
+
+    <button class="btn" onclick="ajouterChiffre('0')">0</button>
+    <button class="btn" onclick="ajouterVirgule()">.</button>
+    <button class="btn btn-equals" onclick="calculerResultat()">=</button>
+    <button class="btn btn-operator" onclick="choisirOperation('+')">+</button>
+
+    <button class="btn" onclick="toutEffacer()">C</button>
+  </div>
+</div>
+
+<script>
+let nombreActuel='0';
+let nombrePrecedent='';
+let operation=null;
+let nouvelleEntree=false;
+
+const affichageResultat=document.getElementById('result');
+const affichageExpression=document.getElementById('expression');
+
+function mettreAJourAffichage(){
+  affichageResultat.textContent=nombreActuel;
+  affichageExpression.textContent=nombrePrecedent+' '+(operation||'');
+}
+
+function ajouterChiffre(chiffre){
+  if(nouvelleEntree){
+    nombreActuel=chiffre;
+    nouvelleEntree=false;
+  }else{
+    nombreActuel=(nombreActuel==='0')?chiffre:nombreActuel+chiffre;
+  }
+  mettreAJourAffichage();
+}
+
+function ajouterVirgule(){
+  if(!nombreActuel.includes('.')){
+    nombreActuel+='.';
+  }
+  mettreAJourAffichage();
+}
+
+function choisirOperation(op){
+  nombrePrecedent=nombreActuel;
+  operation=op;
+  nouvelleEntree=true;
+  mettreAJourAffichage();
+}
+
+function calculerResultat(){
+  const a=parseFloat(nombrePrecedent);
+  const b=parseFloat(nombreActuel);
+  let resultat;
+
+  switch(operation){
+    case '+': resultat=a+b; break;
+    case '−': resultat=a-b; break;
+    case '×': resultat=a*b; break;
+    case '÷': resultat=b!==0?a/b:'Erreur'; break;
+    default: return;
+  }
+
+  nombreActuel=String(resultat);
+  operation=null;
+  nouvelleEntree=true;
+  mettreAJourAffichage();
+}
+
+function toutEffacer(){
+  nombreActuel='0';
+  nombrePrecedent='';
+  operation=null;
+  mettreAJourAffichage();
+}
+</script>
+</body>
+</html>
