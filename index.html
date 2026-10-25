@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Faïçal – Portfolio</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <header>
-            <h1>Portfolio de Faïçal</h1>
-            <nav>
-                <a href="index.html" class="active">Accueil</a>
-                <a href="apropos.html">À propos</a>
-                <a href="competences.html">Compétences</a>
-                <a href="projets.html">Projets</a>
-                <a href="contact.html">Contact</a>
-            </nav>
-            
-        </header>
-        <main>
-            <section class="hero">
-                <img src="moi-profil.jpg" alt="Portrait de Faïçal">
-                <h2>Bienvenue sur mon portfolio</h2>
-                <p>Je suis Faïçal, étudiant en Licence 3 Informatique.<br>
-                Passionné par le développement web, la programmation, les réseaux et la cybersécurité.</p>
-                <a href="apropos.html" class="btn">Explorer mon univers</a>
-            </section>
-        </main>
-        <footer>
-            <p>&copy; 2026 Faïçal (Abu Rasheed) – Tous droits réservés.</p>
-        </footer>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio de Faïçal Yaya Al-Hassan, étudiant en Licence 3 Informatique : projets web, programmation et découverte des réseaux.">
+  <meta name="theme-color" content="#101a2c">
+  <title>Faïçal Yaya Al-Hassan | Étudiant en informatique</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Faïçal Yaya Al-Hassan</h1>
+    <nav aria-label="Navigation principale">
+      <a href="index.html" class="active" aria-current="page">Accueil</a>
+      <a href="apropos.html">À propos</a>
+      <a href="competences.html">Compétences</a>
+      <a href="projets.html">Projets</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Portfolio · Licence 3 Informatique</span>
+        <h2>Bonjour, moi c’est <span>Faïçal.</span><br>Je construis mes compétences, projet après projet.</h2>
+        <p>Étudiant en informatique, je m’intéresse au développement web, à la programmation et aux réseaux. Ici, je partage mon parcours, mes apprentissages et les projets que je réalise.</p>
+        <div class="hero-actions">
+          <a href="projets.html" class="btn">Découvrir mes projets <span aria-hidden="true">↗</span></a>
+          <a href="contact.html" class="btn btn-secondary">Me contacter</a>
+        </div>
+        <div class="hero-note" aria-label="Centres d’intérêt">
+          <span>Développement web</span><span>Programmation</span><span>Réseaux & cybersécurité</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="moi-profil.jpg" alt="Portrait de Faïçal Yaya Al-Hassan">
+        <div class="hero-badge">Étudiant en informatique<small>En apprentissage continu</small></div>
+      </div>
+    </section>
+  </main>
+  <footer><p>&copy; 2026 Faïçal Yaya Al-Hassan — Portfolio personnel.</p></footer>
+</body>
 </html>
